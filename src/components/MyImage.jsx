@@ -9,7 +9,7 @@ const MyImage = ({ imgs = [{ url: "" }] }) => { // imgs me hamari four images ha
       <div className="grid grid-four-column">
         {imgs.map((curElm, index) => {
           return (
-            <figure>
+            <figure key={index}>
               <img
                 src={curElm.url}
                 alt={curElm.filename}

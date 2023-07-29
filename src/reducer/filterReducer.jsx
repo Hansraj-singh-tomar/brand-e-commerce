@@ -132,15 +132,33 @@ const filterReducer = (state, action) => {
           });
         }
 
-        if (price === 0) {
-          tempFilterProduct = tempFilterProduct.filter(
-            (curElem) => curElem.price === price
-          );
-        } else {
+        // if (price === 0) {
+        //   tempFilterProduct = tempFilterProduct.filter(
+        //     (curElem) => curElem.price === price
+        //   );
+        // } else {
+        //   tempFilterProduct = tempFilterProduct.filter(
+        //     (curElem) => curElem.price <= price
+        //   );
+        // }
+
+        // Handle the "all" case for price separately
+        if (price > 0) {
           tempFilterProduct = tempFilterProduct.filter(
             (curElem) => curElem.price <= price
           );
         }
+
+        // If all filter options are set to "all", include all products
+        // if (
+        //   category === "all" &&
+        //   company === "all" &&
+        //   color === "all" &&
+        //   price === 0 &&
+        //   !text
+        // ) {
+        //   tempFilterProduct = all_products;
+        // }
 
         return {
           ...state,

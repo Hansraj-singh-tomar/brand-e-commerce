@@ -1,27 +1,40 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 import { FaCheck } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import { Button } from "../styles/Button";
-import CartAmountToggle from "./CartAmountToggle";
-import { useCartContext } from "../context/cart_context";
 
 
-const AddToCart = ({ product }) => {
-    const { addToCart } = useCartContext();
+import CartAmountToggle from "./cart section/CartAmountToggle";
+import { addToCart } from "../features/cartSlice";
+// import { addToCart, setCartData } from "../features/cartSlice";
+// import { loadCartDataFromLocalStorage } from "../features/cartSlice";
 
-    const {id, colors, stock } = product;
+import { useDispatch, useSelector } from "react-redux";
+
+
+const AddToCart = ({ singleProduct }) => {
+
+    const {id, colors, stock } = singleProduct;
+
+    const dispatch = useDispatch();
+    // const cartData = useSelector((state) => state.cart);
     
     const [color, setColor] = useState(colors[0]);
-    const [amount, setAmount] = useState(1);
+    const [qty, setQty] = useState(1);
 
     const setDecrease = () => {
-        amount > 1 ? setAmount(amount - 1) : setAmount(1)
+      qty > 1 ? setQty(qty - 1) : setQty(1)
     };
 
     const setIncrease = () => {
-        amount < stock ? setAmount(amount+1) : setAmount(stock);
+        qty < stock ? setQty(qty+1) : setQty(stock);
     };
+
+    // useEffect(() => {
+    //   dispatch(loadCartDataFromLocalStorage());
+    //   dispatch(setCartData(cartData));
+    // }, [cartData]);
 
     return (
         <Wrapper>
@@ -45,13 +58,13 @@ const AddToCart = ({ product }) => {
 
             {/* add to cart  */}
             <CartAmountToggle
-                amount={amount}
+                qty={qty}
                 setDecrease={setDecrease}
                 setIncrease={setIncrease}
             />
 
-            <NavLink to="/cart" onClick={() => addToCart(id,color,amount,product)}> 
-                <Button className="btn ">Add To Cart</Button>
+            <NavLink to="/cart">  
+                <Button className="btn" onClick={() => dispatch(addToCart({id,color,qty,singleProduct}))}>Add To Cart</Button>
             </NavLink>
             {/* yha colors nhi color ko pass kiya hai as a argument and amount ek state variable hai */}
             {/* add to cart ke liye ek nya context/reducer create karenge  */}

@@ -1,24 +1,43 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { Button } from "../styles/Button";
-import heroImg from '../assets/images/hero.jpg'
+import { Button } from "../../styles/Button";
+import heroImg from "../../assets/images/hero2.png"
+import { useLocation } from 'react-router-dom';
 
 const HeroSection = ({ myData }) => {
-const {name}  = myData;
+  const {name}  = myData;
+  const location = useLocation();
 
   return (
     <Wrapper>
       <div className="container">
         <div className="grid grid-two-column">
           <div className="hero-section-data">
-            <p className="intro-data">Welcome to </p>
-            <h1> {name} </h1>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
-              atque temporibus veniam doloribus libero ad error omnis voluptates
-              animi! Suscipit sapiente.
-            </p>
-            <NavLink>
+            {
+              location.pathname === "/about" ? 
+              (
+                <>
+
+                <p className="intro-data">Hii i am </p> 
+                <h1> {name} </h1>
+                <p>
+                  Highly skilled React.js developer with building modern web applications. Solid understanding of front-end development principles, proficient in JavaScript, and experienced in utilizing React.js libraries and frameworks. A motivated and adaptable team player with
+                  excellent problem-solving skills and a passion for creating user-friendly interfaces.
+                </p>
+                </>
+              )
+              :
+              ( 
+                <>
+                  <p className="intro-data" style={{color: "black"}}>Welcome to </p>
+                  <h1> {name} </h1>
+                  <p>
+                     Discover the latest trends and shop fashionable clothing, shoes, and accessories for men and women. 
+                  </p>
+                </>
+              )
+            }
+            <NavLink to={"/products"}>
               <Button>show now</Button>
             </NavLink>
           </div>
@@ -54,6 +73,7 @@ const Wrapper = styled.section`
     }
     .intro-data {
       margin-bottom: 0;
+      color: rgb(13,110,253);
     }
   }
   .hero-section-image {

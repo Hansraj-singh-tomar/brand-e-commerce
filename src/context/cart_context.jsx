@@ -5,7 +5,7 @@ const CartContext = createContext();
 
 const getLocalCartData = () => {
   let localCartData = localStorage.getItem("thapaCart");
-  if (localCartData == []) {
+  if (!localCartData || localCartData == []) {
     return [];
   } else {
     return JSON.parse(localCartData);
@@ -22,7 +22,7 @@ const initialState = {
 
 const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
+  
   const addToCart = (id, color, amount, product) => {
     dispatch({ type: "ADD_TO_CART", payload: { id, color, amount, product } });
   };

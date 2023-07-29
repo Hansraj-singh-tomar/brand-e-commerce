@@ -1,21 +1,22 @@
-import React from 'react'
-import FormatPrice from '../Helpers/FormatPrice';
-import CartAmountToggle from './CartAmountToggle';
+import React, { useEffect } from 'react'
 import { FaTrash } from "react-icons/fa";
-import { useCartContext } from '../context/cart_context';
 
-const CartItem = (curElem) => {
+import CartAmountToggle from './CartAmountToggle';
+import FormatPrice from '../../Helpers/FormatPrice';
+
+import { removeItem, setDecrement, setIncrement, cartItemPriceTotal } from '../../features/cartSlice';
+
+import { useDispatch, useSelector } from 'react-redux';
+
+const CartItem = ({curElem}) => {
     let {id, name, image, color, price, amount} = curElem;
 
-    const { removeItem, setDecrease, setIncreament } = useCartContext();
+    const dispatch = useDispatch();
+    const cartData = useSelector((state) => state.cart)
 
-    // const setDecrease = () => {
-        // amount > 1 ? setAmount(amount - 1) : setAmount(1);
-    // };
-    
-    // const setIncrease = () => {
-        // amount < stock ? setAmount(amount + 1) : setAmount(stock);
-    // };
+    useEffect(() => {
+        dispatch(cartItemPriceTotal())
+    }, [cartData])
 
   return (
     <div className="cart_heading grid grid-five-column">
@@ -47,9 +48,9 @@ const CartItem = (curElem) => {
 
         {/* Quantity */}
         <CartAmountToggle
-            amount={amount}
-            setDecrease={() => setDecrease(id)}
-            setIncrease={() => setIncreament(id)}
+            qty={amount}
+            setDecrease={() => dispatch(setDecrement(id))}
+            setIncrease={() => dispatch(setIncrement(id))}
         />
 
         {/* Subtotal */}
@@ -61,7 +62,7 @@ const CartItem = (curElem) => {
 
         {/* Remove Icon */}
         <div>
-            <FaTrash className='remove_icon' onClick={() => removeItem(id)}/>
+            <FaTrash className='remove_icon' onClick={() => dispatch(removeItem(id))}/>
         </div>
     </div>
   )

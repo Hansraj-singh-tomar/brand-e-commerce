@@ -10,7 +10,7 @@ import styled from "styled-components";
 const Star = ({ stars, reviews }) => {
   const ratingStar = Array.from({ length: 5 }, (elem, index) => {
     let number = index + 0.5; //this is to show half star
-    debugger;
+    // debugger;
     return (
         // i=0,i=1,i=2,i=3,i=4
         // stars = 4.4

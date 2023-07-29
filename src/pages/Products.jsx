@@ -1,12 +1,22 @@
+import { useEffect } from "react";
 import styled from "styled-components";
-import FilterSection from "./components/FilterSection";
-import ProductList from "./components/ProductList";
-import Sort from "./components/Sort";
-// import { useFilterContext } from "./context/filter_context";
+
+import FilterSection from "../components/Part-1/FilterSection";
+import Sort from "../components/Part-1/Sort";
+import ProductList from "../components/Part-1/ProductList";
+
+// import { useDispatch, useSelector } from "react-redux";
+// import { filterProducts, sortingProducts } from "../features/productSlice";
 
 const Products = () => {
-  // const { filter_products } = useFilterContext();
-  // console.log(filter_products);
+  // const dispatch = useDispatch();
+  // const products = useSelector((state) => state.products)
+  
+  // useEffect(() => {
+  //   dispatch(filterProducts());
+  //   dispatch(sortingProducts());
+  // }, [products, dispatch, products.filters, products.sorting_value])
+
   return (
     <Wrapper>
       <div className="container grid grid-filter-column">

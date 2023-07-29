@@ -1,15 +1,20 @@
 import styled from "styled-components";
-import { useCartContext } from "./context/cart_context";
-import CartItem from  "./components/CartItem";
 import { NavLink } from "react-router-dom";
-import { Button } from "./styles/Button";
-import FormatPrice from "./Helpers/FormatPrice";
+import { Button } from "../styles/Button";
+
+import CartItem from "../components/cart section/CartItem";
+import FormatPrice from "../Helpers/FormatPrice";
+
+import { useDispatch, useSelector } from "react-redux";
+
+import { clearCart } from "../features/cartSlice";
 
 const Cart = () => {
 
-  const { cart, clearCart, total_price, shipping_fee } = useCartContext();
-  // console.log(cart);
-
+  const dispatch = useDispatch();
+  const cartData = useSelector((state) => state.cart);
+  const {cart, total_price, shipping_fee} = cartData;
+  
   if(cart.length === 0){
     return (
       <EmptyDiv>
@@ -34,8 +39,8 @@ const Cart = () => {
       {/* 2. */}
       <div className="cart-item">
         {
-          cart.map((curElem) => {
-            return <CartItem key={curElem.id} {...curElem} />
+          cart.map((curElem, index) => {
+            return <CartItem key={index} curElem={curElem} />
           })
         }
       </div>
@@ -46,7 +51,7 @@ const Cart = () => {
         <NavLink to="/products">
           <Button>Continue Shopping</Button>
         </NavLink>
-        <Button className="btn btn-clear" onClick={clearCart}>Clear Cart</Button>
+        <Button className="btn btn-clear" onClick={() => dispatch(clearCart())}>Clear Cart</Button>
       </div>
 
       {/* order total_amount */}

@@ -1,19 +1,24 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from "styled-components";
 
 import { GlobalStyle } from './GlobalStyle'  // now this will work as a external css
  
-import Home from './Home'
-import About from "./About";
-import Contact from "./Contact";
-import Products from "./Products";
-import Cart from "./Cart";
-import ErrorPage from "./ErrorPage";
-import SingleProduct from "./SingleProduct";
+import Home from './pages/Home'
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Header from "./pages/Header";
+import ErrorPage from "./pages/subPages/ErrorPage";
+import Footer from "./pages/Footer";
 
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+
+import Products from "./pages/Products";
+import Cart from "./pages/Cart";
+import SingleProduct from "./pages/SingleProduct";
+
+import { useDispatch, useSelector } from 'react-redux'
+import {getProducts, getSingleProducts} from './features/productSlice';
+
 
 // background-color: ${({ theme }) => theme.colors.bg}; // ye line GlobalStyle.js file me hai 
 
@@ -22,14 +27,21 @@ const App = () => {
   const theme = {
     colors: {
       heading: "rgb(24 24 29)",
-      text: "rgba(29 ,29, 29, .8)",
+
+      // text: "rgba(29 ,29, 29, .8)",
+      text: "rgba(13 ,110, 153, .8)",
+      
       white: "#fff",
       black: " #212529",
-      helper: "#8490ff",
+      
+      // helper: "#8490ff",
+      helper: "rgba(13 ,110, 253, .8)",
   
       bg: "#F6F8FA",
       footer_bg: "#0a1435",
-      btn: "rgb(98 84 243)",
+
+      // btn: "rgb(98 84 243)",
+      btn: "rgb(13 110 253)",
       border: "rgba(98, 84, 243, 0.5)",
       hr: "#ffffff",
       gradient:
@@ -43,6 +55,16 @@ const App = () => {
       tab: "998px",
     },
   };
+
+  const dispatch = useDispatch();
+
+  const data = useSelector((state) => state.products)
+  console.log("from app component",data);
+
+  useEffect(() => {
+    dispatch(getProducts())
+    dispatch(getSingleProducts('thapaserialnoa'))
+  }, [])
   
   return (
     <ThemeProvider theme={theme}>

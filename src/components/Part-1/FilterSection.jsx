@@ -1,16 +1,19 @@
 import styled from "styled-components";
-import { useFilterContext } from "../context/filter_context";
 import { FaCheck } from "react-icons/fa";
-import FormatPrice from "../Helpers/FormatPrice";
-import { Button } from "../styles/Button";
+import { Button } from "../../styles/Button";
+
+import FormatPrice from "../../Helpers/FormatPrice";
+
+import { useDispatch, useSelector } from "react-redux";
+import { clearFilters, updateFilterValue, filterProducts } from "../../features/productSlice";
+
 
 const FilterSection = () => {
-  const {
-    filters: { text, category, color, price, maxPrice, minPrice },
-    updateFilterValue,
-    all_products,
-    clearFilters,
-  } = useFilterContext();
+
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.products);
+  const {all_products, filters: {text, category, color, price, maxPrice, minPrice}} = products;
+  
 
   // get the unique values of each property
   const getUniqueData = (data, attr) => {
@@ -31,18 +34,27 @@ const FilterSection = () => {
       // return (newVal = ["All", ...new Set([].concat(...newVal))]);
       newVal = newVal.flat();
     }
-    return (newVal = ["All", ...new Set(newVal)]);  // unique value ka array dega instead of duplicate value ka 
+    return (newVal = ["all", ...new Set(newVal)]);  // unique value ka array dega instead of duplicate value ka 
   };
 
   // we need to have the individual data of each in an array format
-//   const categoryData = getUniqueData(all_products);
+  //   const categoryData = getUniqueData(all_products);
   const categoryData = getUniqueData(all_products, "category");
   const companyData = getUniqueData(all_products, "company");
   const colorsData = getUniqueData(all_products, "colors");
-  // console.log(
-  //   "🚀 ~ file: FilterSection.js ~ line 23 ~ FilterSection ~ companyData",
-  //   colorsData
-  // );
+
+  function filterFun(e){
+    let name = e.target.name;
+    let value = e.target.value;
+    dispatch(updateFilterValue({name, value}))
+    dispatch(filterProducts())
+  }
+
+  function hanndleClearBtn(){
+    dispatch(clearFilters());
+    dispatch(filterProducts());
+  }
+
 
   return (
     <Wrapper>
@@ -53,7 +65,7 @@ const FilterSection = () => {
             name="text"
             placeholder="Search"
             value={text}
-            onChange={updateFilterValue}
+            onChange={(e) => filterFun(e)}
           />
         </form>
       </div>
@@ -69,7 +81,7 @@ const FilterSection = () => {
                 name="category"
                 value={curElem}
                 className={curElem === category ? "active" : ""}
-                onClick={updateFilterValue}>
+                onClick={(e) => filterFun(e)}>
                 {curElem}
               </button>
             );
@@ -85,7 +97,7 @@ const FilterSection = () => {
             name="company"
             id="company"
             className="filter-company--select"
-            onClick={updateFilterValue}>
+            onClick={(e) => filterFun(e)}>
             {companyData.map((curElem, index) => {
               return (
                 <option key={index} value={curElem} name="company">
@@ -110,7 +122,7 @@ const FilterSection = () => {
                   value={curColor}
                   name="color"
                   className="color-all--style"
-                  onClick={updateFilterValue}>
+                  onClick={(e) => filterFun(e)}>
                   all
                 </button>
               );
@@ -123,7 +135,7 @@ const FilterSection = () => {
                 name="color"
                 style={{ backgroundColor: curColor }}
                 className={color === curColor ? "btnStyle active" : "btnStyle"}
-                onClick={updateFilterValue}>
+                onClick={(e) => filterFun(e)}>
                 {color === curColor ? <FaCheck className="checkStyle" /> : null}
               </button>
             );
@@ -142,12 +154,12 @@ const FilterSection = () => {
           min={minPrice}
           max={maxPrice}
           value={price}
-          onChange={updateFilterValue}
+          onChange={(e) => filterFun(e)}
         />
       </div>
 
       <div className="filter-clear">
-        <Button className="btn" onClick={clearFilters}>
+        <Button className="btn" onClick={hanndleClearBtn}>
           Clear Filters
         </Button>
       </div>
@@ -248,3 +260,4 @@ const Wrapper = styled.section`
 `;
 
 export default FilterSection;
+

@@ -5,37 +5,31 @@ import { useParams } from "react-router-dom";
 import { MdSecurity } from "react-icons/md";
 import { TbTruckDelivery, TbReplace } from "react-icons/tb";
 
-import { useProductContext } from "./context/productcontext";
-import MyImage from './components/MyImage';
-import { Container } from './styles/Container';
-import FormatPrice from "./Helpers/FormatPrice";
-import Star from "./components/Star";
-import AddToCart from "./components/AddToCart";
+import MyImage from '../components/MyImage';
+import { Container } from '../styles/Container';
+import FormatPrice from "../Helpers/FormatPrice";
+import PageNavigation from "../components/PageNavigation"
+import Star from "../components/Star";
+import AddToCart from "../components/AddToCart";
 
-const API = "https://api.pujakaitem.com/api/products";
+
+import { getSingleProducts } from "../features/productSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 const SingleProduct = () => {
-  const { getSingleProduct, isSingleLoading, singleProduct } =
-    useProductContext();
-
+  
   const { id } = useParams();
 
-  const {
-    // id: alias,
-    name,
-    company,
-    price,
-    description,
-    // category,
-    stock,
-    stars,
-    reviews,
-    image,
-  } = singleProduct;
+  const dispatch= useDispatch();
 
+  const products = useSelector((state) => state.products)
+  
+  const {isSingleLoading, singleProduct: {name, company, price, description, stock, stars, reviews, image}} = products;
+
+  
   useEffect(() => {
-    getSingleProduct(`${API}?id=${id}`);
-  }, []);
+    dispatch(getSingleProducts(id));
+  },[id]);
 
   if (isSingleLoading) {
     return <div className="page_loading">Loading.....</div>;
@@ -101,7 +95,7 @@ const SingleProduct = () => {
               </p>
             </div>
             <hr />
-            {stock > 0 && <AddToCart product={singleProduct} />}
+            {stock > 0 && <AddToCart singleProduct={products.singleProduct} />}
           </div>
         </div>
       </Container>
