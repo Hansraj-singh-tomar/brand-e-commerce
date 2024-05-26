@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FaCheck } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
@@ -15,61 +15,63 @@ import { useDispatch, useSelector } from "react-redux";
 
 const AddToCart = ({ singleProduct }) => {
 
-    const {id, colors, stock } = singleProduct;
 
-    const dispatch = useDispatch();
-    // const cartData = useSelector((state) => state.cart);
-    
-    const [color, setColor] = useState(colors[0]);
-    const [qty, setQty] = useState(1);
+  // const {id, colors, stock } = singleProduct;
+  const { id, stock } = singleProduct;
 
-    const setDecrease = () => {
-      qty > 1 ? setQty(qty - 1) : setQty(1)
-    };
+  const dispatch = useDispatch();
+  // const cartData = useSelector((state) => state.cart);
 
-    const setIncrease = () => {
-        qty < stock ? setQty(qty+1) : setQty(stock);
-    };
+  // const [color, setColor] = useState(colors[0]);
+  const [qty, setQty] = useState(1);
 
-    // useEffect(() => {
-    //   dispatch(loadCartDataFromLocalStorage());
-    //   dispatch(setCartData(cartData));
-    // }, [cartData]);
+  const setDecrease = () => {
+    qty > 1 ? setQty(qty - 1) : setQty(1)
+  };
 
-    return (
-        <Wrapper>
-            <div className="colors">
-                <p>
-                    Colors:
-                    {colors.map((curColor, index) => {
-                        return (
-                            <button 
-                                key={index} 
-                                style={{backgroundColor: curColor}} 
-                                className={color === curColor ? "btnStyle active" : "btnStyle"}
-                                onClick={() => setColor(curColor)}
-                            >
-                                {color === curColor ? <FaCheck className="checkStyle" /> : null}
-                            </button>
-                        );
-                    })}
-                </p>
-            </div>
+  const setIncrease = () => {
+    qty < stock ? setQty(qty + 1) : setQty(stock);
+  };
 
-            {/* add to cart  */}
-            <CartAmountToggle
-                qty={qty}
-                setDecrease={setDecrease}
-                setIncrease={setIncrease}
-            />
+  // useEffect(() => {
+  //   dispatch(loadCartDataFromLocalStorage());
+  //   dispatch(setCartData(cartData));
+  // }, [cartData]);
 
-            <NavLink to="/cart">  
-                <Button className="btn" onClick={() => dispatch(addToCart({id,color,qty,singleProduct}))}>Add To Cart</Button>
-            </NavLink>
-            {/* yha colors nhi color ko pass kiya hai as a argument and amount ek state variable hai */}
-            {/* add to cart ke liye ek nya context/reducer create karenge  */}
-        </Wrapper>
-    );
+  return (
+    <Wrapper>
+      {/* <div className="colors">
+        <p>
+          Colors:
+          {colors.map((curColor, index) => {
+            return (
+              <button
+                key={index}
+                style={{ backgroundColor: curColor }}
+                className={color === curColor ? "btnStyle active" : "btnStyle"}
+                onClick={() => setColor(curColor)}
+              >
+                {color === curColor ? <FaCheck className="checkStyle" /> : null}
+              </button>
+            );
+          })}
+        </p>
+      </div> */}
+
+      {/* add to cart  */}
+      <CartAmountToggle
+        qty={qty}
+        setDecrease={setDecrease}
+        setIncrease={setIncrease}
+      />
+
+      <NavLink to="/cart">
+        <Button className="btn" onClick={() => dispatch(addToCart({ id, qty, singleProduct }))}>Add To Cart</Button>
+      </NavLink>
+      {/* yha colors nhi color ko pass kiya hai as a argument and amount ek state variable hai */}
+      {/* add to cart ke liye ek nya context/reducer create karenge  */}
+    </Wrapper>
+  );
 };
 
 const Wrapper = styled.section`

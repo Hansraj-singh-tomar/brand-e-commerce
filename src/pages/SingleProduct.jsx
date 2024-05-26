@@ -17,19 +17,21 @@ import { getSingleProducts } from "../features/productSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 const SingleProduct = () => {
-  
+
   const { id } = useParams();
 
-  const dispatch= useDispatch();
+  const dispatch = useDispatch();
 
   const products = useSelector((state) => state.products)
-  
-  const {isSingleLoading, singleProduct: {name, company, price, description, stock, stars, reviews, image}} = products;
 
-  
+
+  // const {isSingleLoading, singleProduct: {name, company, price, description, stock, stars, reviews, image}} = products;
+  const { isSingleLoading, singleProduct: { title, brand, price, description, stock, rating, reviews, images, availabilityStatus, discountPercentage, returnPolicy, warrantyInformation } } = products;
+
+
   useEffect(() => {
     dispatch(getSingleProducts(id));
-  },[id]);
+  }, [id]);
 
   if (isSingleLoading) {
     return <div className="page_loading">Loading.....</div>;
@@ -37,27 +39,27 @@ const SingleProduct = () => {
 
   return (
     <Wrapper>
-      <PageNavigation title={name} />
+      <PageNavigation title={title} />
       <Container className="container">
         <div className="grid grid-two-column">
           {/* product Images  */}
           <div className="product_images">
-            <MyImage imgs={image} />
+            <MyImage imgs={images} />
           </div>
 
           {/* product dAta  */}
           <div className="product-data">
-            <h2>{name}</h2>
-            <Star stars={stars} reviews={reviews} />
+            <h2>{title}</h2>
+            {/* <Star stars={rating} reviews={reviews} /> */}
 
             <p className="product-data-price">
               MRP:
               <del>
-                <FormatPrice price={price + 250000} />
+                <FormatPrice price={price} />
               </del>
             </p>
             <p className="product-data-price product-data-real-price">
-              Deal of the Day: <FormatPrice price={price} />
+              Deal of the Day: <FormatPrice price={price % discountPercentage} />
             </p>
             <p>{description}</p>
             <div className="product-data-warranty">
@@ -68,7 +70,7 @@ const SingleProduct = () => {
 
               <div className="product-warranty-data">
                 <TbReplace className="warranty-icon" />
-                <p>30 Days Replacement</p>
+                <p>{returnPolicy}</p>
               </div>
 
               <div className="product-warranty-data">
@@ -78,20 +80,20 @@ const SingleProduct = () => {
 
               <div className="product-warranty-data">
                 <MdSecurity className="warranty-icon" />
-                <p>2 Year Warranty </p>
+                <p>{warrantyInformation}</p>
               </div>
             </div>
 
             <div className="product-data-info">
               <p>
                 Available:
-                <span> {stock > 0 ? "In Stock" : "Not Available"}</span>
+                <span> {availabilityStatus}</span>
               </p>
               <p>
                 ID : <span> {id} </span>
               </p>
               <p>
-                Brand :<span> {company} </span>
+                Brand :<span> {brand} </span>
               </p>
             </div>
             <hr />

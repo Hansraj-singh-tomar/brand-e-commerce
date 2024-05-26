@@ -12,13 +12,13 @@ const FilterSection = () => {
 
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products);
-  const {all_products, filters: {text, category, color, price, maxPrice, minPrice}} = products;
-  
+  const { all_products, filters: { text, category, color, price, maxPrice, minPrice } } = products;
+
 
   // get the unique values of each property
   const getUniqueData = (data, attr) => {
     let newVal = data.map((curElem) => {
-    //   return curElem.category;
+      //   return curElem.category;
       return curElem[attr];  // yha ,mujhe jiska bhi data chahiye vo mene pass kar diya hai like - category, colors and all
     });
 
@@ -29,7 +29,7 @@ const FilterSection = () => {
     // }else{
     //   return (newVal = ["All", ...new Set(newVal)]);  // unique value ka array dega instead of duplicate value ka 
     // }
-    
+
     if (attr === "colors") {
       // return (newVal = ["All", ...new Set([].concat(...newVal))]);
       newVal = newVal.flat();
@@ -40,17 +40,17 @@ const FilterSection = () => {
   // we need to have the individual data of each in an array format
   //   const categoryData = getUniqueData(all_products);
   const categoryData = getUniqueData(all_products, "category");
-  const companyData = getUniqueData(all_products, "company");
-  const colorsData = getUniqueData(all_products, "colors");
+  // const companyData = getUniqueData(all_products, "company");
+  // const colorsData = getUniqueData(all_products, "colors");
 
-  function filterFun(e){
+  function filterFun(e) {
     let name = e.target.name;
     let value = e.target.value;
-    dispatch(updateFilterValue({name, value}))
+    dispatch(updateFilterValue({ name, value }))
     dispatch(filterProducts())
   }
 
-  function hanndleClearBtn(){
+  function hanndleClearBtn() {
     dispatch(clearFilters());
     dispatch(filterProducts());
   }
@@ -89,7 +89,7 @@ const FilterSection = () => {
         </div>
       </div>
 
-      <div className="filter-company">
+      {/* <div className="filter-company">
         <h3>Company</h3>
 
         <form action="#">
@@ -107,9 +107,9 @@ const FilterSection = () => {
             })}
           </select>
         </form>
-      </div>
+      </div> */}
 
-      <div className="filter-colors colors">
+      {/* <div className="filter-colors colors">
         <h3>Colors</h3>
 
         <div className="filter-color-style">
@@ -141,7 +141,7 @@ const FilterSection = () => {
             );
           })}
         </div>
-      </div>
+      </div> */}
 
       <div className="filter_price">
         <h3>Price</h3>

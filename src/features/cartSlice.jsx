@@ -24,7 +24,7 @@ const initialState = {
   // cart: getLocalCartData(),
   total_item: "",
   total_price: "",
-  shipping_fee: 50000,
+  shipping_fee: 7,
 };
 
 const cartSlice = createSlice({
@@ -32,70 +32,72 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      let {id, color, qty, singleProduct} = action.payload;
+      let { id, qty, singleProduct } = action.payload;
 
       let existingProduct = state.cart.find((currItem) => {
-        return currItem.id === id+color;
+        return currItem.id === id;
       })
       // console.log(existingProduct);
 
-      if(existingProduct) {
+      if (existingProduct) {
         let updatedCartItem = state.cart.map((currItem) => {
-          if(currItem.id === id+color) {
+          if (currItem.id === id) {
             let newQty = currItem.amount + qty;
 
-            if(newQty >= currItem.max){
+            if (newQty >= currItem.max) {
               newQty = currItem.max;
             }
 
             currItem.amount = newQty
-          }else{
+          } else {
             return currItem
           }
         })
         state.cart.push(updatedCartItem)
-      }else{
+      } else {
         let productCart = {
-          id: id+color,
-          name: singleProduct.name,
-          color: color, 
+          id: id,
+          name: singleProduct.title,
           amount: qty,
-          image: singleProduct.image[0].url,
+          image: singleProduct.thumbnail,
           price: singleProduct.price,
           max: singleProduct.stock,
         };
         state.cart.push(productCart);
       }
- 
+
+
+
+
     },
 
     setDecrement: (state, action) => {
       const itemIdToDecrement = action.payload;
       state.cart = state.cart.map((currItem) => {
-        if(currItem.id === itemIdToDecrement){
-          let decQty  = currItem.amount - 1;
-          if(decQty <= 1){
+        if (currItem.id === itemIdToDecrement) {
+          let decQty = currItem.amount - 1;
+          if (decQty <= 1) {
             decQty = 1;
           }
           currItem.amount = decQty;
         }
-        return currItem  
+        return currItem
       })
     },
 
     setIncrement: (state, action) => {
       const itemIdToIncrement = action.payload;
       state.cart = state.cart.map((currItem) => {
-        if(currItem.id === itemIdToIncrement){
-          let incQty  = currItem.amount + 1;
-          if(incQty >= currItem.max){
+        if (currItem.id === itemIdToIncrement) {
+          let incQty = currItem.amount + 1;
+          if (incQty >= currItem.max) {
             incQty = currItem.max;
           }
           currItem.amount = incQty;
         }
         return currItem
       })
-      
+
     },
 
     removeItem: (state, action) => {
@@ -107,14 +109,14 @@ const cartSlice = createSlice({
     },
 
     cartItemPriceTotal: (state, action) => {
-      let {total_item, total_price} = state.cart.reduce((acc, currItem) => {
+      let { total_item, total_price } = state.cart.reduce((acc, currItem) => {
         let { price, amount } = currItem;
 
         acc.total_item += amount;
         acc.total_price += price * amount;
 
         return acc;
-      }, {total_item: 0, total_price: 0});
+      }, { total_item: 0, total_price: 0 });
 
       state.total_item = total_item;
       state.total_price = total_price;
@@ -137,4 +139,4 @@ const cartSlice = createSlice({
 export default cartSlice.reducer;
 
 // export const {addToCart, setDecrement, setIncrement, removeItem, clearCart, cartItemPriceTotal, setCartData} = cartSlice.actions; 
-export const {addToCart, setDecrement, setIncrement, removeItem, clearCart, cartItemPriceTotal} = cartSlice.actions; 
+export const { addToCart, setDecrement, setIncrement, removeItem, clearCart, cartItemPriceTotal } = cartSlice.actions; 

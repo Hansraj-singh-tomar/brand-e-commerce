@@ -4,9 +4,9 @@
 // import { useFilterContext } from "../../context/filter_context";
 
 // const Sort = () => {
-  
+
 //   const { filter_products, grid_view, setGridView, setListView, sorting } = useFilterContext();
-  
+
 //   return (
 //     <Wrapper className="sort-section">
 //       {/* 1st column  */}
@@ -98,12 +98,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { gridView, listView, sortingProducts } from "../../features/productSlice";
 
 const Sort = () => {
-  
+
   // const { filter_products, grid_view, setGridView, setListView, sorting } = useFilterContext();
 
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products);
-  const {grid_view, filter_products} = products;
+  const { grid_view, filter_products } = products;
 
   return (
     <Wrapper className="sort-section">
@@ -136,12 +136,12 @@ const Sort = () => {
             className="sort-selection--style"
             onClick={(e) => dispatch(sortingProducts(e.target.value))}>
             <option value="lowest">Price(lowest)</option>
-            <option value="#" disabled></option>
+            {/* <option value="#" disabled></option> */}
             <option value="highest">Price(highest)</option>
-            <option value="#" disabled></option>
+            {/* <option value="#" disabled></option>
             <option value="a-z">Price(a-z)</option>
             <option value="#" disabled></option>
-            <option value="z-a">Price(z-a)</option>
+            <option value="z-a">Price(z-a)</option> */}
           </select>
         </form>
       </div>

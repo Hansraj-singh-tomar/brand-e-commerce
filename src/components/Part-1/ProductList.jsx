@@ -8,8 +8,7 @@ import { useSelector } from "react-redux";
 const ProductList = () => {
 
   const products = useSelector((state) => state.products);
-  const {grid_view, filter_products} = products;
-
+  const { grid_view, filter_products } = products;
   // console.log("from productList comp",filter_products);
 
   if (grid_view === true) {

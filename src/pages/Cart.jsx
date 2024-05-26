@@ -13,19 +13,19 @@ const Cart = () => {
 
   const dispatch = useDispatch();
   const cartData = useSelector((state) => state.cart);
-  const {cart, total_price, shipping_fee} = cartData;
-  
-  if(cart.length === 0){
+  const { cart, total_price, shipping_fee } = cartData;
+
+  if (cart.length === 0) {
     return (
       <EmptyDiv>
         <h3>No Cart in Item</h3>
       </EmptyDiv>
     )
   }
-  
+
   return <Wrapper>
     <div className="container">
-      
+
       {/* 1. */}
       <div className="cart_heading grid grid-five-column">
         <p>Item</p>
@@ -35,7 +35,7 @@ const Cart = () => {
         <p>Remove</p>
       </div>
       <hr />
-      
+
       {/* 2. */}
       <div className="cart-item">
         {
@@ -45,7 +45,7 @@ const Cart = () => {
         }
       </div>
       <hr />
-      
+
       {/* 3. */}
       <div className="cart-two-button">
         <NavLink to="/products">
@@ -56,28 +56,28 @@ const Cart = () => {
 
       {/* order total_amount */}
       <div className="order-total--amount">
-          <div className="order-total--subdata">
-            <div>
-              <p>subtotal:</p>
-              <p>
-                <FormatPrice price={total_price} />
-              </p>
-            </div>
-            <div>
-              <p>shipping fee:</p>
-              <p>
-                <FormatPrice price={shipping_fee} />
-              </p>
-            </div>
-            <hr />
-            <div>
-              <p>order total:</p>
-              <p>
-                <FormatPrice price={shipping_fee + total_price} />
-              </p>
-            </div>
+        <div className="order-total--subdata">
+          <div>
+            <p>subtotal:</p>
+            <p>
+              <FormatPrice price={total_price} />
+            </p>
+          </div>
+          <div>
+            <p>shipping fee:</p>
+            <p>
+              <FormatPrice price={shipping_fee} />
+            </p>
+          </div>
+          <hr />
+          <div>
+            <p>order total:</p>
+            <p>
+              <FormatPrice price={shipping_fee + total_price} />
+            </p>
           </div>
         </div>
+      </div>
 
     </div>
   </Wrapper>;

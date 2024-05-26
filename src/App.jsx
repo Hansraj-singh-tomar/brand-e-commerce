@@ -1,9 +1,9 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from "styled-components";
 
 import { GlobalStyle } from './GlobalStyle'  // now this will work as a external css
- 
+
 import Home from './pages/Home'
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -17,7 +17,7 @@ import Cart from "./pages/Cart";
 import SingleProduct from "./pages/SingleProduct";
 
 import { useDispatch, useSelector } from 'react-redux'
-import {getProducts, getSingleProducts} from './features/productSlice';
+import { getProducts, getSingleProducts } from './features/productSlice';
 
 
 // background-color: ${({ theme }) => theme.colors.bg}; // ye line GlobalStyle.js file me hai 
@@ -30,13 +30,13 @@ const App = () => {
 
       // text: "rgba(29 ,29, 29, .8)",
       text: "rgba(13 ,110, 153, .8)",
-      
+
       white: "#fff",
       black: " #212529",
-      
+
       // helper: "#8490ff",
       helper: "rgba(13 ,110, 253, .8)",
-  
+
       bg: "#F6F8FA",
       footer_bg: "#0a1435",
 
@@ -59,28 +59,28 @@ const App = () => {
   const dispatch = useDispatch();
 
   const data = useSelector((state) => state.products)
-  console.log("from app component",data);
+  // console.log("from app component",data);
 
   useEffect(() => {
     dispatch(getProducts())
-    dispatch(getSingleProducts('thapaserialnoa'))
+    // dispatch(getSingleProducts('thapaserialnoa'))
   }, [])
-  
+
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <GlobalStyle/> 
-        <Header/>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/singleproduct/:id" element={<SingleProduct />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="*" element={<ErrorPage />} />
-          </Routes>
-        <Footer/>  
+        <GlobalStyle />
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/singleproduct/:id" element={<SingleProduct />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="*" element={<ErrorPage />} />
+        </Routes>
+        <Footer />
       </Router>
     </ThemeProvider>
   )

@@ -11,8 +11,8 @@ const MyImage = ({ imgs = [{ url: "" }] }) => { // imgs me hamari four images ha
           return (
             <figure key={index}>
               <img
-                src={curElm.url}
-                alt={curElm.filename}
+                src={curElm}
+                alt="img"
                 className="box-image--style"
                 key={index}
                 onClick={() => setMainImage(curElm)}
@@ -25,7 +25,7 @@ const MyImage = ({ imgs = [{ url: "" }] }) => { // imgs me hamari four images ha
 
       <div className="main-screen">
         {/* <img src={imgs[0].url} alt={imgs[0].filename}/> */}
-        <img src={mainImage.url} alt={mainImage.filename} />
+        <img src={mainImage} alt="mainImg" />
       </div>
     </Wrapper>
   );

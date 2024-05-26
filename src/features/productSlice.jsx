@@ -1,17 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-const API = "https://api.pujakaitem.com/api/products";
+// const API = "https://api.pujakaitem.com/api/products";
+const API = "https://dummyjson.com/products";
 
 export const getProducts = createAsyncThunk("getProducts", async () => {
     const response = await fetch(API)
-    const products = await response.json();
-    return products;
+    const data = await response.json();
+    return data.products;
 })
 
-export const getSingleProducts = createAsyncThunk("getSingleProducts", async (productId) => {
-    const response = await fetch(`${API}?id=${productId}`)
-    const singleProduct = await response.json();
-    return singleProduct;
+export const getSingleProducts = createAsyncThunk("getSingleProducts", async (id) => {
+    const response = await fetch(`${API}/${id}`)
+    const data = await response.json();
+    return data;
 })
 
 const initialState = {
@@ -26,7 +27,7 @@ const initialState = {
     filter_products: [],
     featureProducts: [],
     singleProduct: {},
-    
+
     filters: {
         text: "",
         category: "all",
@@ -39,111 +40,109 @@ const initialState = {
 };
 
 export const productSlice = createSlice({
-  name: "Products", // this for dev tools
-  initialState,
-  reducers: {
+    name: "Products", // this for dev tools
+    initialState,
+    reducers: {
 
-    gridView: (state, action) => {
-        state.grid_view = true;
-    },
+        gridView: (state, action) => {
+            state.grid_view = true;
+        },
 
-    listView: (state, action) => {
-        state.grid_view = false;
-    },
+        listView: (state, action) => {
+            state.grid_view = false;
+        },
 
-    sortingProducts: (state, action) => {
-        let newSortData;
-        let sorting_value = action.payload;
-        
-        const { filter_products } = state;
-        function sortProd(a,b){
-            if (sorting_value === "lowest") {
-                return a.price - b.price;
+        sortingProducts: (state, action) => {
+            let newSortData;
+            let sorting_value = action.payload;
+
+            const { filter_products } = state;
+            function sortProd(a, b) {
+                if (sorting_value === "lowest") {
+                    return a.price - b.price;
+                }
+
+                if (sorting_value === "highest") {
+                    return b.price - a.price;
+                }
+
+                if (sorting_value === "a-z") {
+                    return a.name.localeCompare(b.name);
+                }
+
+                if (sorting_value === "z-a") {
+                    return b.name.localeCompare(a.name);
+                }
             }
-      
-            if (sorting_value === "highest") {
-                return b.price - a.price;
+            newSortData = [...filter_products].sort(sortProd);
+
+            state.filter_products = [...newSortData];
+        },
+
+        updateFilterValue: (state, action) => {
+            const { name, value } = action.payload;
+
+            state.filters = {
+                ...state.filters,
+                [name]: value,
             }
-      
-            if (sorting_value === "a-z") {
-                return a.name.localeCompare(b.name);
+        },
+
+        filterProducts: (state, action) => {
+            let { all_products } = state;
+            let tempFilterProduct = all_products;
+
+            const { text, category, company, color, price } = state.filters;
+
+            if (text) {
+                tempFilterProduct = tempFilterProduct.filter((curElem) => {
+                    return curElem.name.toLowerCase().includes(text);  // startWith bhi use kar sakte hai 
+                });
             }
-      
-            if (sorting_value === "z-a") {
-                return b.name.localeCompare(a.name);
+
+            if (category !== "all") {
+                tempFilterProduct = tempFilterProduct.filter(
+                    (curElem) => curElem.category === category
+                );
             }
-        }
-        newSortData = [...filter_products].sort(sortProd);
 
-        state.filter_products = [...newSortData];
-    },
+            if (company !== "all") {
+                tempFilterProduct = tempFilterProduct.filter(
+                    (curElem) => curElem.company.toLowerCase() === company.toLowerCase()
+                );
+            }
 
-    updateFilterValue: (state, action) => {
-        const {name, value} = action.payload;
-        
-        state.filters = {
-            ...state.filters,
-            [name]: value,
-        }
-    },
+            if (color !== "all") {
+                tempFilterProduct = tempFilterProduct.filter((curElem) => {
+                    return curElem.colors.includes(color)
+                });
+            }
 
-    filterProducts: (state, action) => {
-        let { all_products } = state;
-        let tempFilterProduct = all_products;
-  
-        const { text, category, company, color, price } = state.filters;
+            // Handle the "all" case for price separately
+            if (price > 0) {
+                tempFilterProduct = tempFilterProduct.filter(
+                    (curElem) => curElem.price <= price
+                );
+            }
 
+            state.filter_products = [...tempFilterProduct];
 
+        },
 
-        if (text) {
-          tempFilterProduct = tempFilterProduct.filter((curElem) => {
-            return curElem.name.toLowerCase().includes(text);  // startWith bhi use kar sakte hai 
-          });
-        }
-  
-        if (category !== "all") {
-          tempFilterProduct = tempFilterProduct.filter(
-            (curElem) => curElem.category === category
-          );
-        }
-  
-        if (company !== "all") {
-          tempFilterProduct = tempFilterProduct.filter(
-            (curElem) => curElem.company.toLowerCase() === company.toLowerCase()
-          );
-        }
-  
-        if (color !== "all") {
-          tempFilterProduct = tempFilterProduct.filter((curElem) => {
-            return curElem.colors.includes(color)
-          });
-        }
-
-        // Handle the "all" case for price separately
-        if (price > 0) {
-            tempFilterProduct = tempFilterProduct.filter(
-              (curElem) => curElem.price <= price
-            );
-        }
-
-        state.filter_products = [...tempFilterProduct];
+        clearFilters: (state, action) => {
+            state.filters = {
+                text: "",
+                category: "all",
+                company: "all",
+                color: "all",
+                maxPrice: 0,
+                price: state.filters.maxPrice,
+                minPrice: state.filters.maxPrice,
+            };
+        },
 
     },
-
-    clearFilters: (state, action) => {
-        state.filters = {
-              text: "",
-              category: "all",
-              company: "all",
-              color: "all",
-              maxPrice: 0,
-              price: state.filters.maxPrice,
-              minPrice: state.filters.maxPrice,
-        };
-    },
-
-  },
-  extraReducers: {
+    extraReducers: {
 
         //  for all products
         [getProducts.pending]: (state) => {
@@ -185,7 +184,7 @@ export const productSlice = createSlice({
 
 
 export default productSlice.reducer;
-export const {gridView, listView, clearFilters, filterProducts, updateFilterValue, sortingProducts} = productSlice.actions;
+export const { gridView, listView, clearFilters, filterProducts, updateFilterValue, sortingProducts } = productSlice.actions;
 
 
 

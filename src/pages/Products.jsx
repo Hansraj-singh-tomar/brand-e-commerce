@@ -11,7 +11,7 @@ import ProductList from "../components/Part-1/ProductList";
 const Products = () => {
   // const dispatch = useDispatch();
   // const products = useSelector((state) => state.products)
-  
+
   // useEffect(() => {
   //   dispatch(filterProducts());
   //   dispatch(sortingProducts());
@@ -39,9 +39,9 @@ const Products = () => {
 
 
 const Wrapper = styled.section`
-
   .grid-filter-column {
-    grid-template-columns: 0.2fr 1fr ; {/* 20% for left portion and 80% for right portion*/}  
+    grid-template-columns: 0.2fr 1fr ; 
+    /* 20% for left portion and 80% for right portion  */
   }
   @media (max-width: ${({ theme }) => theme.media.mobile}) {
     .grid-filter-column {
